@@ -14,7 +14,7 @@ def read_channels(data):
 
 def genetare_header():
     text_header = ['lenght', 'datatime', 'date', 'time', 'x1', 'x2', 'x3'] + \
-                  ['y'+str(i) for i in range(1, 22)] + ['temperature', 'pressure', 'x4']
+                  ['y'+str(i) for i in range(1, 21)] + ['humidity', 'temperature', 'pressure', 'x4']
     chan_header = [x + str(i)  for i in range(1,16) for x in ["dt" , 'tr', 'al', 'vl', 'nch'] ]
     text_header += chan_header
     text_header += ['m' + str(i) for i in range(1, 8)]
