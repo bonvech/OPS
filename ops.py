@@ -17,7 +17,7 @@ def genetare_header():
                   ['y'+str(i) for i in range(1, 21)] + ['humidity', 'temperature', 'pressure', 'x4']
     chan_header = [x + str(i)  for i in range(1,16) for x in ["dt" , 'tr', 'al', 'vl', 'nch'] ]
     text_header += chan_header
-    text_header += ['m' + str(i) for i in range(1, 8)]
+    text_header += ['m' + str(i) for i in range(1, 6)] + ['TotalConc']
     text_header += ['z' + str(i) for i in range(1, 16)] + ['end']
     return text_header
 
@@ -31,7 +31,7 @@ def read_one_event():
 
     data_byte = file_handler.read(line_length)
     if len(data_byte) < line_length:
-        #print("len =", len(data_byte))
+        print(f"\nError in data!!!! len = {len(data_byte)} bytes but expected {line_length} bytes" )
         return
 
     ### read first bytes
@@ -48,7 +48,9 @@ def read_one_event():
     channels = read_channels(data_byte[chan_pos:])
 
     ### read 7 integers after channels
-    middle = struct.unpack('7H', data_byte[chan_pos + chan_len: last_pos])
+    #print(chan_pos + chan_len + 5 * 2, last_pos)
+    middle  = list(struct.unpack('5H', data_byte[chan_pos + chan_len: last_pos-4]))
+    middle += list(struct.unpack('f',  data_byte[chan_pos + chan_len + 5 * 2: last_pos]))
 
     ### read last bytes
     last_num = struct.unpack('15dI', data_byte[last_pos:])
@@ -75,13 +77,13 @@ while True:
     alldata = read_one_event()
     if not alldata:
         break
-    
+
     ### make dictionary
     newline = {x:y for x,y in zip(text_header, alldata)}
-    
+
     df = pd.concat([df,pd.DataFrame([newline])], ignore_index=True)
 
-    
+
 #print(firstdata, channels, middle, last_num, sep='\n-----------------\n')
 #print(alldata)
 #print(last_num)
