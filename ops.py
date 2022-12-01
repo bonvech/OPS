@@ -14,7 +14,7 @@ def read_channels(data):
 
 def genetare_header():
     text_header = ['lenght', 'datatime', 'date', 'time', 'x1', 'x2', 'x3'] + \
-                  ['y'+str(i) for i in range(1, 21)] + ['humidity', 'temperature', 'pressure', 'x4']
+                  ['y'+str(i) for i in range(1, 21)] + ['x4', 'temperature', 'pressure', 'humidity']
     chan_header = [x + str(i)  for i in range(1,16) for x in ["dt" , 'tr', 'al', 'vl', 'nch'] ]
     text_header += chan_header
     text_header += ['m' + str(i) for i in range(1, 6)] + ['TotalConc']
@@ -35,7 +35,7 @@ def read_one_event():
         return
 
     ### read first bytes
-    format_first = 'ii6hiiI' + 23 * 'd' +'I'
+    format_first = 'ii6hiiI' + 23 * 'd' +'f'
     firstdata = list(struct.unpack(format_first, data_byte[:chan_pos]))
     ## соберем дату
     firstdata.insert(2, str(firstdata[4]) + '-' + str(f'{firstdata[2]:02d}') + '-' + str(f'{firstdata[3]:02d}'))
@@ -77,13 +77,13 @@ while True:
     alldata = read_one_event()
     if not alldata:
         break
-
+    
     ### make dictionary
     newline = {x:y for x,y in zip(text_header, alldata)}
-
+    
     df = pd.concat([df,pd.DataFrame([newline])], ignore_index=True)
 
-
+    
 #print(firstdata, channels, middle, last_num, sep='\n-----------------\n')
 #print(alldata)
 #print(last_num)
