@@ -1,0 +1,3 @@
+pandas
+numpy
+yadisk==3.3.0

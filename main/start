@@ -1,0 +1,18 @@
+#!/bin/bash
+pathtopython=~/Meteo/env/bin/
+workdir=~/Meteo/Приборы/OPS/main
+
+#ls
+
+echo start
+date
+
+cd $workdir
+pwd
+#${pathtopython}pip install -r requirements.txt
+
+#${pathtopython}python3 ops_device.py 
+${pathtopython}python3 ops_main.py 
+#&>>$workdir/ftp.log
+
+echo end
