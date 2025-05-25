@@ -38,7 +38,7 @@ def select_year_month(datastring):
 ############################################################################
 class OPS:
     def __init__(self):
-        self.debugmode = False #True #False
+        self.debugmode = True #False
         self.device_name = "ops"
         self.model   = None
         self.sernum  = None
@@ -90,6 +90,7 @@ class OPS:
 
             bot = telebot.TeleBot(telebot_config.token, parse_mode=None)
             bot.send_message(telebot_config.channel, text)
+            self.print_message(f"Sent to bot: {text}", '\n')  ## write to log file
         except Exception as err:
             ##  напечатать строку ошибки
             text = f": ERROR in writing to bot: {err}"
@@ -114,9 +115,10 @@ class OPS:
             if dirname == self.logdirname:
                 self.logdirname = path
             if dirname == self.csvdirname:
-                self.csvdir = path
+                self.csvdirname = path
             if dirname == self.O30dirname:
                 self.O30dirname = path
+        #print([self.O30dirname, self.csvdirname, self.logdirname, self.sep])
 
 
     ############################################################################
@@ -865,9 +867,9 @@ class OPS:
         ##  write to table files
         for ym_pattern in year_month:
             dfsave = data[data['datetime'].apply(select_year_month) == ym_pattern]
-            if self.debugmode:
-                text = ym_pattern + ": " + str(dfsave.shape)
-                self.print_message(text, '\n')
+            
+            text = f"{ym_pattern}: {dfsave.shape}"
+            self.print_message(text, '\n')
 
             if not dfsave.empty:
                 self.add_data_to_csv_files(dfsave, ym_pattern)
