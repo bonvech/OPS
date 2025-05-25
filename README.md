@@ -1,2 +1,3 @@
 # OPS
-OPS device
+
+Optical Particle Sizer (OPS) Spectrometers
