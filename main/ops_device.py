@@ -826,7 +826,7 @@ class OPS:
     ##  save one file
     ## ----------------------------------------------------------------
     def add_data_to_csv_files(self, dfsave, ym_pattern):
-        filename = f"{self.csvdir}{self.sep}{ym_pattern}_{self.device_name}.csv"
+        filename = f"{self.csvdirname}{ym_pattern}_{self.device_name}.csv"
 
         ## create new file
         if not os.path.exists(filename):

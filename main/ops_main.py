@@ -65,12 +65,16 @@ if __name__ == "__main__":
     fileO30_path = ops.O30dirname
 
     # ======================================
+    ##  download and translate last file from yadisk
     ##  download file from yadisk
-    #disk_async = AsyncYaDisk(token=yadisk_token)
     disk_sync = YaDisk(token=yadisk_token)
     lastfile = dowload_last_file(link, fileO30_path)
     #print(lastfile)
-    #download_all_files(link, file_path)
-
     ##  translate last file
     ops.translate_ops_file_to_site(lastfile)
+    
+    ##  ====================================
+    ##  translate all files
+    #download_all_files(link, fileO30_path)
+    #for filename in os.listdir(fileO30_path):
+    #    ops.translate_ops_file_to_site(fileO30_path + filename)
